@@ -4,7 +4,19 @@ import axios from 'axios'
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-const githubData = axios.get('https://api.github.com/users/credleo95');
+const URL = 'https://api.github.com/users/credleo95'
+axios.get(URL)
+    .then( response => {
+      console.log(response.data); 
+      console.log("It's working")
+    }
+        )
+  
+    .catch( error => {
+        console.log("Error:", err);
+    })
+
+    const err = "Oh no... It didn't work. Try again."
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -54,13 +66,53 @@ const followersArray = [];
 function cardCreator(data){
   const cardBox = document.createElement("div");
   cardBox.classList.add("card");
-  cardBox.appendChild(profilePic);
+  
   const profilePic = document.createElement("img");
-  profilePic.src = githubData.avatar_url ;
+  cardBox.appendChild(profilePic);
+  profilePic.src = data.avatar_url ;
+  
   const cardInfo = document.createElement("div");
   cardInfo.classList.add("card-info");
+  cardBox.appendChild(cardInfo);
+  
+  const realName = document.createElement("h3");
+  realName.classList.add("name");
+  realName.textContent = data.name 
+  cardBox.appendChild(realName);
+  
+  const username = document.createElement("p");
+  username.classList.add("username");
+  username.textContent = `${data.login}`
+  cardInfo.appendChild(username);
 
+  const location = document.createElement("p");
+  location.textContent = `Location: ${data.location}`
+  cardInfo.appendChild(location);
+  const profile = document.createElement("p")
+  profile.textContent = "Profile: "
+  cardInfo.appendChild(profile);
+  
+  const address = document.createElement("a");
+  address.href = `${data.html_url}`
+  profile.appendChild(address);
+
+  const followers = document.createElement("p")
+  followers.textContent = `Followers: ${data.followers}`
+  cardInfo.appendChild(followers)
+
+  const following = document.createElement("p")
+  following.textContent = `Following: ${data.following}`
+  cardInfo.appendChild(following)
+
+  const bio = document.createElement("p")
+  bio.textContent =`Bio: ${data.bio}`
+  cardInfo.appendChild(bio);
+
+  return cardBox 
 }
+console.log(cardCreator(URL));
+
+
 /*
   List of LS Instructors Github username's:
     tetondan
