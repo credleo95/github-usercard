@@ -6,17 +6,18 @@ import axios from 'axios'
 */
 const URL = 'https://api.github.com/users/credleo95'
 axios.get(URL)
-    .then( response => {
-      console.log(response.data); 
-      console.log("It's working")
+    .then(response => {
+      cardCreator(response.data);
+      console.log("It's working");
     }
         )
   
     .catch( error => {
+      const err = "You are worth it. You got this. Try again."
         console.log("Error:", err);
     })
 
-    const err = "Oh no... It didn't work. Try again."
+    
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -42,7 +43,22 @@ axios.get(URL)
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["tetondan","dustinmyers","justsml","luishrd","bigknell"];
+ 
+followersArray.forEach(name => {
+  let newURL = "https://api.github.com/users/" + name
+  axios.get(newURL)
+    .then(response => {
+      cardCreator(response.data);
+      console.log("It's working");
+    }
+        )
+  
+    .catch( error => {
+      const err = "You are worth it. You got this. Try again."
+        console.log("Error:", err);
+    })
+ })
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -63,13 +79,18 @@ const followersArray = [];
       </div>
     </div>
 */
-function cardCreator(data){
+
+function cardCreator(obj){
+  
   const cardBox = document.createElement("div");
   cardBox.classList.add("card");
-  
+
+  const topCard = document.querySelector(".cards");
+  topCard.appendChild(cardBox);
+
   const profilePic = document.createElement("img");
   cardBox.appendChild(profilePic);
-  profilePic.src = data.avatar_url ;
+  profilePic.src = obj.avatar_url ;
   
   const cardInfo = document.createElement("div");
   cardInfo.classList.add("card-info");
@@ -77,40 +98,40 @@ function cardCreator(data){
   
   const realName = document.createElement("h3");
   realName.classList.add("name");
-  realName.textContent = data.name 
+  realName.textContent = `${obj.name}` 
   cardBox.appendChild(realName);
   
   const username = document.createElement("p");
   username.classList.add("username");
-  username.textContent = `${data.login}`
+  username.textContent = `${obj.login}`
   cardInfo.appendChild(username);
 
   const location = document.createElement("p");
-  location.textContent = `Location: ${data.location}`
+  location.textContent = `Location: ${obj.location}`
   cardInfo.appendChild(location);
   const profile = document.createElement("p")
-  profile.textContent = "Profile: "
+  profile.textContent = "Profile:"
   cardInfo.appendChild(profile);
   
   const address = document.createElement("a");
-  address.href = `${data.html_url}`
+  address.href = `${obj.html_url}`
+  address.textContent = `${obj.html_url}`
   profile.appendChild(address);
 
   const followers = document.createElement("p")
-  followers.textContent = `Followers: ${data.followers}`
+  followers.textContent = `Followers: ${obj.followers}`
   cardInfo.appendChild(followers)
 
   const following = document.createElement("p")
-  following.textContent = `Following: ${data.following}`
+  following.textContent = `Following: ${obj.following}`
   cardInfo.appendChild(following)
 
   const bio = document.createElement("p")
-  bio.textContent =`Bio: ${data.bio}`
+  bio.textContent ="Bio:" + obj.bio 
   cardInfo.appendChild(bio);
 
   return cardBox 
 }
-console.log(cardCreator(URL));
 
 
 /*
